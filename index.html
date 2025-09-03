@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كريمورا - أفخر الحلويات الشرقية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap');
+        
+        * {
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        body {
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .hidden-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out;
+        }
+        
+        .visible-section {
+            opacity: 1;
+            transform: translateY(0);
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        /* Hero Background */
+        .hero-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,32L48,53.3C96,75,192,117,288,122.7C384,128,480,96,576,90.7C672,85,768,107,864,133.3C960,160,1056,192,1152,197.3C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat;
+            background-size: cover;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        /* Navbar Scroll Effect */
+        .navbar-scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Product Card Hover */
+        .product-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-card img {
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover img {
+            transform: scale(1.1);
+        }
+        
+        /* Button Animations */
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(103, 126, 234, 0.4);
+        }
+        
+        /* WhatsApp Button */
+        .whatsapp-btn {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            animation: pulse 2s infinite;
+        }
+        
+        .whatsapp-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+        }
+        
+        /* Loading Animation */
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #navbar{
+          background-color: #6a71d7;
+        }
+        /* Mobile Menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        /* Footer */
+        footer { background: #1f2937; color: #e5e7eb; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Loading Screen -->
+    <div id="loader" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="top-0 w-full z-40 transition-all duration-300 bg-purple">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="text-2xl font-bold text-white">
+                    <span class="bg-clip-text">كريمورا</span> - <span  class="text-pink-400 bg-clip-text">Kremora</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 space-x-reverse">
+                    <a href="#home" class="text-white hover:text-purple-200 transition">الرئيسية</a>
+                    <a href="#about" class="text-white hover:text-purple-200 transition">عن المتجر</a>
+                    <a href="#products" class="text-white hover:text-purple-200 transition">منتجاتنا</a>
+                    <a href="#contact" class="text-white hover:text-purple-200 transition">تواصل معنا</a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="menuBtn" class="md:hidden text-white">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 w-64 h-full bg-white shadow-lg md:hidden">
+            <div class="p-4">
+                <button id="closeMenu" class="text-gray-600 mb-8">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+                <div class="flex flex-col space-y-4">
+                    <a href="#home" class="text-gray-700 hover:text-purple-600 transition">الرئيسية</a>
+                    <a href="#about" class="text-gray-700 hover:text-purple-600 transition">عن المتجر</a>
+                    <a href="#products" class="text-gray-700 hover:text-purple-600 transition">منتجاتنا</a>
+                    <a href="#contact" class="text-gray-700 hover:text-purple-600 transition">تواصل معنا</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg min-h-screen flex items-center relative">
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center text-white">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
+                    مرحباً بكم في <span class="text-yellow-300">كريمورا</span>
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 opacity-90">أشهى الحلويات الشرقية والغربية</p>
+                <div class="flex flex-col md:flex-row gap-4 justify-center">
+                    <a href="#products" class="btn-primary px-8 py-4 bg-white rounded-full font-bold hover:bg-gray-100 transition transform hover:scale-105">
+                        تصفح منتجاتنا
+                    </a>
+                    <a href="https://wa.me/201018936562" target="_blank" class="whatsapp-btn px-8 py-4 text-white rounded-full font-bold flex items-center justify-center gap-2">
+                        <i class="fab fa-whatsapp text-2xl"></i>
+                        اطلب الآن
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Decorative Elements -->
+        <div class="absolute bottom-0 left-0 w-full">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                <path fill="#ffffff" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white hidden-section">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">عن متجر كريمورا</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-purple-400 to-pink-400 mx-auto"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="order-2 md:order-1">
+                    <h3 class="text-2xl font-bold text-gray-700 mb-4">رحلة من الذوق الرفيع</h3>
+                    <p class="text-gray-600 leading-relaxed mb-4">
+                        في كريمورا، نفخر بتقديم أجود أنواع الحلويات الشرقية والغربية المصنوعة بأيدي أمهر الطهاة. نحن نؤمن بأن الحلويات ليست مجرد طعام، بل هي تجربة تُسعد القلب وتُحلي الحياة.
+                    </p>
+                    <p class="text-gray-600 leading-relaxed mb-4">
+                        منذ افتتاحنا، التزمنا بتقديم منتجات عالية الجودة باستخدام أفضل المكونات الطبيعية. كل قطعة حلوى نصنعها تحمل بصمة الحب والإتقان.
+                    </p>
+                    <div class="flex flex-wrap gap-4 mt-6">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                            <span class="text-gray-700">مكونات طازجة</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                            <span class="text-gray-700">صناعة يدوية</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                            <span class="text-gray-700">توصيل سريع</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="order-1 md:order-2">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400 rounded-lg transform rotate-3"></div>
+                        <div class="relative bg-white p-8 rounded-lg shadow-xl">
+                            <div class="text-center">
+                                <i class="fas fa-birthday-cake text-6xl text-purple-500 mb-4"></i>
+                                <h4 class="text-2xl font-bold text-gray-800 mb-2">+1000</h4>
+                                <p class="text-gray-600">عميل سعيد</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-20 bg-gray-50 hidden-section">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">منتجاتنا المميزة</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-purple-400 to-pink-400 mx-auto"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Product 1 -->
+                <div class="product-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="h-64 overflow-hidden">
+                        <img src="https://scontent.fcai19-6.fna.fbcdn.net/v/t39.30808-6/524427798_1079484387656234_7061673714337234460_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=833d8c&_nc_ohc=RtS1V_xPF6MQ7kNvwEBn7NW&_nc_oc=Adn7Y53rQkxy3kSboViU8Y4DJJZzfaM7NpK-rltNAkoXl7KtP21amFnAs8koL6bf1SI&_nc_zt=23&_nc_ht=scontent.fcai19-6.fna&_nc_gid=lEQDjoxtaBUCHRixhm5eog&oh=00_AfVhGcdzsHvyXqjl7uEPooD9kU1cPyMJsZvC-Oowx9NBYw&oe=68B26817" 
+                             alt="تورتة الشوكولاتة الفاخرة" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">تورتة الشوكولاتة الفاخرة</h3>
+                        <p class="text-gray-600 mb-4">طبقات من الشوكولاتة البلجيكية الغنية مع كريمة الشوكولاتة</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-purple-600">250 جنيه</span>
+                            <a href="https://wa.me/201018936562?text=أريد طلب تورتة الشوكولاتة الفاخرة" 
+                               target="_blank" 
+                               class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full hover:shadow-lg transition">
+                                اطلب الآن
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="h-64 overflow-hidden">
+                        <img src="https://scontent.fcai19-6.fna.fbcdn.net/v/t39.30808-6/522096405_1075462344725105_765516519083563097_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=833d8c&_nc_ohc=K4NtrXb2ysIQ7kNvwEWQ3HD&_nc_oc=AdmqvrSbNQbEf6AYgW9uIvKHjK72UIUCioqk33SSx-vgkh_JwhqFyDJr-Bc6xj6zPNo&_nc_zt=23&_nc_ht=scontent.fcai19-6.fna&_nc_gid=7_QKJdPkrYxndwXiFaCNMQ&oh=00_AfXRzBVfEaJvXUk3NCblM-EfcBkF_2B4_mokB_NiKuL5Zw&oe=68B266D7" 
+                             alt="كيك الفراولة" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">كيك الفراولة الطازجة</h3>
+                        <p class="text-gray-600 mb-4">كيك إسفنجي ناعم مع طبقات من كريمة الفراولة الطبيعية</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-purple-600">200 جنيه</span>
+                            <a href="https://wa.me/201018936562?text=أريد طلب كيك الفراولة الطازجة" 
+                               target="_blank" 
+                               class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full hover:shadow-lg transition">
+                                اطلب الآن
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="h-64 overflow-hidden">
+                        <img src="https://scontent.fcai19-6.fna.fbcdn.net/v/t39.30808-6/520971475_1074090848195588_6971855632819133959_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_ohc=2UjszJWlS_cQ7kNvwFErEtG&_nc_oc=AdlQi7Lw9VvXJCoVVui6eFjwJ-vPKcJG-2Ez1yNOXEpQUue3qDbrt0_anUgKsGtuTEI&_nc_zt=23&_nc_ht=scontent.fcai19-6.fna&_nc_gid=3IBghpvPXjyFU0rGlWJSrA&oh=00_AfVtB7JuWQ8NiR8-fs_eDpzy8x4GI-quFQRSAGW0xobQ9A&oe=68B28CCE" 
+                             alt="حلوى الكراميل" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">حلوى الكراميل الذهبي</h3>
+                        <p class="text-gray-600 mb-4">تشكيلة من حلوى الكراميل المقرمش مع اللوز والفستق</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-purple-600">150 جنيه</span>
+                            <a href="https://wa.me/201018936562?text=أريد طلب حلوى الكراميل الذهبي" 
+                               target="_blank" 
+                               class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full hover:shadow-lg transition">
+                                اطلب الآن
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="h-64 overflow-hidden">
+                        <img src="https://scontent.fcai19-6.fna.fbcdn.net/v/t39.30808-6/519675369_1074078201530186_7110727039018516846_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=833d8c&_nc_ohc=tPwB82BXHqIQ7kNvwEOIRZk&_nc_oc=AdnrmdRy_VqVr_qtrgbkya57_cyd_Y5t-G-JVIE-PiDBretnWKBAj1YnXotoCBaUbUQ&_nc_zt=23&_nc_ht=scontent.fcai19-6.fna&_nc_gid=gNxMvh9sY7SRS9nRm_TsIA&oh=00_AfX2n5zTHqUTAcfze7brmJg5pPYL4LP_Pd-yG85ly-zGCw&oe=68B2982C" 
+                             alt="تورتة الفواكه" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">تورتة الفواكه الاستوائية</h3>
+                        <p class="text-gray-600 mb-4">مزيج رائع من الفواكه الطازجة مع كريمة الفانيليا</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-purple-600">220 جنيه</span>
+                            <a href="https://wa.me/201018936562?text=أريد طلب تورتة الفواكه الاستوائية" 
+                               target="_blank" 
+                               class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full hover:shadow-lg transition">
+                                اطلب الآن
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="product-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="h-64 overflow-hidden">
+                        <img src="https://scontent.fcai19-6.fna.fbcdn.net/v/t39.30808-6/520408565_1074973788107294_8103126339161604807_n.jpg?stp=c0.60.720.720a_dst-jpg_s206x206_tt6&_nc_cat=109&ccb=1-7&_nc_sid=50ad20&_nc_ohc=dgzv3fQzxOMQ7kNvwFyZCCR&_nc_oc=AdnH0QM9FEgD2SQ-BI73NCID1rJA5J1to-zLiE0W5B9a-qV6pYLOa2uFyM5QGuFPjy0&_nc_zt=23&_nc_ht=scontent.fcai19-6.fna&_nc_gid=ywu3oJueyFqhAoxyDc0uSw&oh=00_AfX-DNVQAWVa1QpQQaquPlmyo5dksFDBoFM5Kt4qyi3x-w&oe=68B26E09" 
+                             alt="ميني كيك" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">ميني كيك متنوع</h3>
+                        <p class="text-gray-600 mb-4">تشكيلة من الكب كيك بنكهات مختلفة ومميزة</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-purple-600">180 جنيه</span>
+                            <a href="https://wa.me/201018936562?text=أريد طلب ميني كيك متنوع" 
+                               target="_blank" 
+                               class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full hover:shadow-lg transition">
+                                اطلب الآن
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="product-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="h-64 overflow-hidden">
+                        <img src="https://scontent.fcai19-6.fna.fbcdn.net/v/t39.30808-6/519085636_1070467268557946_4838795124326631848_n.jpg?stp=c280.0.720.720a_dst-jpg_s206x206_tt6&_nc_cat=100&ccb=1-7&_nc_sid=50c75d&_nc_ohc=nzqK4OvtzvMQ7kNvwEOxnNY&_nc_oc=Adlo_6ElYJeEvd4imq1KZSvUHjSShRBe7PjphGmj54mmf9aXuxY_LtEWOoxZZwKqmaA&_nc_zt=23&_nc_ht=scontent.fcai19-6.fna&_nc_gid=7tsYsmMq4Ug9M8V_J5ObUA&oh=00_AfVSiZqnp_PLaq3hG6g0oKVhP5kuuMkebT-7Oh_cSDDayQ&oe=68B29A37" 
+                             alt="دونات" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">دونات ملون فاخر</h3>
+                        <p class="text-gray-600 mb-4">دونات طري مغطى بأنواع مختلفة من الشوكولاتة والكريمة</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-purple-600">120 جنيه</span>
+                            <a href="https://wa.me/201018936562?text=أريد طلب دونات ملون فاخر" 
+                               target="_blank" 
+                               class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full hover:shadow-lg transition">
+                                اطلب الآن
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section (new) -->
+    <section id="contact" class="py-16 bg-white hidden-section">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">تواصل معنا</h2>
+                <p class="text-gray-600">لو عندك طلب خاص أو استفسار، ابعتلنا رسالة وهنرد عليك بأسرع وقت.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <!-- Contact Info -->
+                <div class="space-y-4">
+                    <div class="flex items-start gap-4">
+                        <i class="fas fa-map-marker-alt text-2xl text-purple-500 mt-1"></i>
+                        <div>
+                            <h4 class="font-bold text-gray-800">العنوان</h4>
+                            <p class="text-gray-600">القاهرة - مصر (أذكر عنوان المحل الكامل هنا)</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <i class="fas fa-phone text-2xl text-green-500 mt-1"></i>
+                        <div>
+                            <h4 class="font-bold text-gray-800">الموبايل</h4>
+                            <p class="text-gray-600">+20 101 893 6562</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <i class="fas fa-envelope text-2xl text-pink-500 mt-1"></i>
+                        <div>
+                            <h4 class="font-bold text-gray-800">الإيميل</h4>
+                            <p class="text-gray-600">info@kreemora.com</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <a href="https://wa.me/201018936562" target="_blank" class="whatsapp-btn inline-flex items-center gap-3 px-6 py-3 rounded-full font-bold text-white">
+                            <i class="fab fa-whatsapp text-2xl"></i> تواصل عبر واتساب
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Contact Form (opens WhatsApp with message) -->
+                <div>
+                    <form id="contactForm" class="bg-gray-50 p-6 rounded-lg shadow">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">الاسم</label>
+                            <input type="text" id="name" class="w-full p-3 rounded border" placeholder="اسمك">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">رقم الموبايل</label>
+                            <input type="tel" id="phone" class="w-full p-3 rounded border" placeholder="010xxxxxxxx">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">رسالتك / طلبك</label>
+                            <textarea id="message" class="w-full p-3 rounded border" rows="4" placeholder="اكتب طلبك هنا..."></textarea>
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="submit" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full font-bold">
+                                أرسل عبر واتساب
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Optional Map -->
+            <div class="mt-8">
+                <iframe class="w-full rounded-lg shadow" height="300" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d55126.123456789!2d31.200092!3d30.044420!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145845f1b...!2sCairo!5e0!3m2!1sar!2seg!4v0000000000000" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (new) -->
+    <footer class="py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-2">كريمورا</h3>
+                    <p class="text-gray-300">أشهى الحلويات الشرقية والغربية - مصنوع بحب وإتقان.</p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold mb-2">روابط سريعة</h4>
+                    <ul class="text-gray-300 space-y-2">
+                        <li><a href="#home" class="hover:text-white">الرئيسية</a></li>
+                        <li><a href="#about" class="hover:text-white">عن المتجر</a></li>
+                        <li><a href="#products" class="hover:text-white">منتجاتنا</a></li>
+                        <li><a href="#contact" class="hover:text-white">تواصل معنا</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold mb-2">تابعنا</h4>
+                    <div class="flex items-center gap-4">
+                        <a href="https://www.facebook.com/Kremorasweets/photos" class="text-gray-300 hover:text-white"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-tiktok fa-lg"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-youtube fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-10 border-t border-gray-700 pt-6 text-center text-gray-400">
+                © <span id="year"></span> كريمورا — جميع الحقوق محفوظة
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Remove loader when page fully loaded
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('loader');
+            if (loader) {
+                loader.style.opacity = '0';
+                loader.style.pointerEvents = 'none';
+                setTimeout(() => loader.remove(), 600);
+            }
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('navbar-scrolled');
+            } else {
+                navbar.classList.remove('navbar-scrolled');
+            }
+
+            // reveal sections
+            document.querySelectorAll('.hidden-section').forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 100) {
+                    section.classList.add('visible-section');
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const closeMenu = document.getElementById('closeMenu');
+
+        menuBtn && menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+        });
+        closeMenu && closeMenu.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+        });
+
+        // Contact form opens WhatsApp with prefilled message
+        const contactForm = document.getElementById('contactForm');
+        contactForm && contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = encodeURIComponent(document.getElementById('name').value || 'اسم غير معروف');
+            const phone = encodeURIComponent(document.getElementById('phone').value || '');
+            const message = encodeURIComponent(document.getElementById('message').value || '');
+            const text = `مرحباً!%0Aالاسم: ${name}%0Aالهاتف: ${phone}%0Aالطلب: ${message}`;
+            const waLink = `https://wa.me/201018936562?text=${text}`;
+            window.open(waLink, '_blank');
+        });
+
+        // Set current year in footer
+        document.getElementById('year').innerText = new Date().getFullYear();
+    </script>
+</body>
+</html>
